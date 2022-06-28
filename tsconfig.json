@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "outDir": "lib",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "declaration": true,
+    "declarationDir": "lib",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@styles/*": ["src/styles/*"],
+      "@styles": ["src/styles/index.ts"],
+      "@utils/*": ["src/utils/*"],
+      "@storyUtils/*": ["src/storyUtils/*"],
+      "@customTypes/*": ["src/customTypes/*"],
+      "@icons/*": ["src/icons/*"],
+      "@icons": ["src/icons/index.ts"],
+      "@config": ["src/config/index.ts"],
+      "@contexts/*": ["src/contexts/*"],
+      "@components/*": ["src/components/*"],
+      "@static/*": ["static/*"]
+    }
+  },
+  "include": [
+    "src/*",
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
+}

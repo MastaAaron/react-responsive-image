@@ -1,0 +1,40 @@
+{
+  "name": "react-responsive-image",
+  "version": "0.0.1",
+  "description": "A minimal React component for responsive images.",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rm -rf lib && rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Aaron Resing <a.resing@hotmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.1",
+    "@types/react": "^18.0.14",
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.1.0",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.7.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "rollup": "^2.75.7",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-typescript2": "^0.32.1",
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "endOfLine": "lf",
+    "semi": false,
+    "trailingComma": "none"
+  }
+}

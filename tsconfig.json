@@ -21,20 +21,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "baseUrl": ".",
-    "paths": {
-      "@styles/*": ["src/styles/*"],
-      "@styles": ["src/styles/index.ts"],
-      "@utils/*": ["src/utils/*"],
-      "@storyUtils/*": ["src/storyUtils/*"],
-      "@customTypes/*": ["src/customTypes/*"],
-      "@icons/*": ["src/icons/*"],
-      "@icons": ["src/icons/index.ts"],
-      "@config": ["src/config/index.ts"],
-      "@contexts/*": ["src/contexts/*"],
-      "@components/*": ["src/components/*"],
-      "@static/*": ["static/*"]
-    }
+    "baseUrl": "."
   },
   "include": [
     "src/*",

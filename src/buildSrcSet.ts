@@ -1,5 +1,8 @@
-import resolveUrlDefault from "./urlResolvers";
+import resolveUrlDefault from "./urlResolvers"
 
 export default function buildSrcSet(src?: string) {
-  return Array(10).fill(src || "").map(resolveUrlDefault).join(",\n")
+  return Array(10)
+    .fill(src || "")
+    .map(resolveUrlDefault)
+    .join(",\n")
 }

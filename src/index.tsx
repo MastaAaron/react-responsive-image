@@ -1,6 +1,6 @@
 import React, { CSSProperties, ImgHTMLAttributes } from "react"
 import { buildSrcSetW, buildSrcSetX } from "./buildSrcSet"
-import { CropSetting } from "./urlResolvers"
+import { CropSetting, URLResolver } from "./urlResolvers"
 
 interface ImageSrcSetPropsX {
   descriptor: "x"
@@ -26,7 +26,7 @@ interface ImageCommonProps {
   crop?: CropSetting
   objectFit?: CSSProperties["objectFit"]
   objectPosition?: CSSProperties["objectPosition"]
-  resolveUrl?: () => string | undefined
+  resolveUrl?: URLResolver
 }
 
 type ImageHTMLElementProps = Omit<
@@ -38,16 +38,6 @@ type ImagePropsX = ImageHTMLElementProps & ImageCommonProps & ImageSrcSetPropsX
 type ImagePropsW = ImageHTMLElementProps & ImageCommonProps & ImageSrcSetPropsW
 
 type ImageProps = ImagePropsW | ImagePropsX
-
-// TEMP - to test discriminating union type
-// const mockProps: ImageProps = {
-//   src: "/",
-//   descriptor: "w",
-//   maxWidth: 2000,
-//   objectFit: "cover",
-//   // minWidth: 200,
-//   sizes: ""
-// }
 
 function gatherProps<T extends ImageProps>(props: T) {
   const {
@@ -105,7 +95,7 @@ function ImageX(props: ImagePropsX) {
 
   const { src, srcSet: srcSetProp, ...srcSetBuilderParams } = commonProps
 
-  const srcSet = buildSrcSetX(src, minWidth) //{ minWidth, ...srcSetBuilderParams })
+  const srcSet = buildSrcSetX(src, { minWidth, ...srcSetBuilderParams })
 
   return <img srcSet={srcSetProp || srcSet} {...passthroughProps} />
 }
@@ -122,7 +112,7 @@ function ImageW(props: ImagePropsW) {
 
   const { src, srcSet: srcSetProp, ...srcSetBuilderParams } = commonProps
 
-  const srcSet = buildSrcSetW(src) // , { srcSetWidths, ...srcSetBuilderParams })
+  const srcSet = buildSrcSetW(src, { srcSetWidths, ...srcSetBuilderParams })
   const sizes = `(max-width: ${maxWidth}px) 100vw, ${maxWidth}px`
 
   return (

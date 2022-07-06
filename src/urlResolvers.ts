@@ -2,12 +2,14 @@
 
 export type CropSetting = "left" | "right" | "top" | "center" | "bottom"
 
-interface ImageParams {
+export interface ImageParams {
   width?: number
   height?: number
   quality?: number
   crop?: CropSetting
 }
+
+export type URLResolver = (inputUrl: string, params: ImageParams) => string
 
 /**
  * Adds the provided image transform params to the provided URL in the correct format
@@ -112,10 +114,10 @@ const addContentfulParams = (url: URL, params: ImageParams) => {
  * Adds the provided image transform params to the provided URL in the correct format
  * Compatible with Shopify & Contentful asset URLs
  */
-export default function resolveUrlDefault(
+export const resolveUrlDefault: URLResolver = (
   inputUrl: string,
   params: ImageParams
-) {
+) => {
   // URL() class doesn't support protocol-relative URLs
   // Make sure input URL contains full protocol; assume HTTPS as fallback
   const url = inputUrl?.startsWith?.("//") ? `https:${inputUrl}` : inputUrl
@@ -142,3 +144,5 @@ export default function resolveUrlDefault(
     return inputUrl
   }
 }
+
+export default resolveUrlDefault

@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "rm -rf lib && rollup -c",
-    "test": "jest"
+    "test": "jest",
+    "typecheck": "tsc -p tsconfig.json"
   },
   "keywords": [],
   "author": "Aaron Resing <a.resing@hotmail.com>",

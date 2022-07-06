@@ -49,30 +49,95 @@ type ImageProps = ImagePropsW | ImagePropsX
 //   sizes: ""
 // }
 
-export function Image(props: ImageProps) {
+function gatherProps<T extends ImageProps>(props: T) {
   const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    descriptor, // Omitted
+    // Descriptor-specific
+    minWidth,
+    maxWidth,
+    srcSetWidths,
+    sizes,
+    // Common/config
     src,
-    srcSet: srcSetProp,
-    // descriptor = "w",
-    // quality,
-    // crop,
-    // objectFit,
-    // objectPosition,
-    // resolveUrl,
-    // minWidth,
-    // maxWidth,
-    // srcSetWidths,
-    // sizes,
-    ...passthroughProps
+    srcSet,
+    objectFit,
+    objectPosition,
+    style: styleProp,
+    quality,
+    crop,
+    resolveUrl,
+    ...imageElementProps
   } = props
 
-  let srcSet = ""
-
-  if (props.descriptor === "x") {
-    srcSet = buildSrcSetX(src, props.minWidth)
-  } else {
-    srcSet = buildSrcSetW(src)
+  const style: CSSProperties = {
+    ...styleProp,
+    objectFit,
+    objectPosition
   }
 
+  return {
+    descriptorSpecificProps: {
+      minWidth,
+      maxWidth,
+      srcSetWidths,
+      sizes
+    } as Pick<T, "minWidth" | "maxWidth" | "srcSetWidths" | "sizes">,
+    commonProps: {
+      src,
+      srcSet,
+      quality,
+      crop,
+      resolveUrl
+    },
+    passthroughProps: {
+      style,
+      ...imageElementProps
+    }
+  }
+}
+
+function ImageX(props: ImagePropsX) {
+  const { descriptorSpecificProps, commonProps, passthroughProps } =
+    gatherProps<ImagePropsX>(props)
+
+  const { minWidth } = descriptorSpecificProps
+
+  const { src, srcSet: srcSetProp, ...srcSetBuilderParams } = commonProps
+
+  const srcSet = buildSrcSetX(src, minWidth) //{ minWidth, ...srcSetBuilderParams })
+
   return <img srcSet={srcSetProp || srcSet} {...passthroughProps} />
+}
+
+function ImageW(props: ImagePropsW) {
+  const { descriptorSpecificProps, commonProps, passthroughProps } =
+    gatherProps<ImagePropsW>(props)
+
+  const {
+    maxWidth = 1280,
+    sizes: sizesProp,
+    srcSetWidths
+  } = descriptorSpecificProps
+
+  const { src, srcSet: srcSetProp, ...srcSetBuilderParams } = commonProps
+
+  const srcSet = buildSrcSetW(src) // , { srcSetWidths, ...srcSetBuilderParams })
+  const sizes = `(max-width: ${maxWidth}px) 100vw, ${maxWidth}px`
+
+  return (
+    <img
+      sizes={sizesProp || sizes}
+      srcSet={srcSetProp || srcSet}
+      {...passthroughProps}
+    />
+  )
+}
+
+export function Image(props: ImageProps) {
+  if (props.descriptor === "x") {
+    return <ImageX {...props} />
+  }
+
+  return <ImageW {...props} />
 }

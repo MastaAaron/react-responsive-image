@@ -1,3 +1,5 @@
+// import { Cloudinary } from "@cloudinary/url-gen"
+
 export type CropSetting = "left" | "right" | "top" | "center" | "bottom"
 
 interface ImageParams {
@@ -5,6 +7,49 @@ interface ImageParams {
   height?: number
   quality?: number
   crop?: CropSetting
+}
+
+/**
+ * Adds the provided image transform params to the provided URL in the correct format
+ * assuming it's a Cloudinary image URL
+ */
+const addCloudinaryParams = (url: URL, params: ImageParams) => {
+  const urlElements = url.pathname.split("/").slice(1)
+
+  // Pop off the last URL segment; assumed to be file name or asset ID
+  const fileName = urlElements.pop() || ""
+
+  // Last element could be asset version
+  const lastEl = urlElements[urlElements.length - 1]
+  const version = /v\d+/.test(lastEl) ? lastEl : ""
+
+  // Keep first 3 parts of path: <cloud_name>/<asset_type>/<delivery_type>
+  const outputUrlElements = urlElements.slice(0, 3)
+
+  // Crop settings mapped to corresponding "gravity" settings in Cloudinary
+  const gravityByCropSetting = {
+    left: "west",
+    right: "east",
+    top: "north",
+    center: "center",
+    bottom: "south"
+  }
+
+  const cloudinaryParams = []
+
+  if (params.crop) {
+    const gravity = gravityByCropSetting[params.crop]
+
+    cloudinaryParams.push("c_fill", `g_${gravity}`)
+  }
+
+  if (params.width) cloudinaryParams.push(`w_${params.width}`)
+  if (params.height) cloudinaryParams.push(`h_${params.height}`)
+  if (params.quality) cloudinaryParams.push(`q_${params.quality}`)
+
+  outputUrlElements.push(cloudinaryParams.join(), version, fileName)
+
+  url.pathname = outputUrlElements.filter(Boolean).join("/")
 }
 
 /**
@@ -82,6 +127,9 @@ export default function resolveUrlDefault(
 
     if (urlObj.hostname.includes("ctfassets"))
       addContentfulParams(urlObj, params)
+
+    if (urlObj.hostname.includes("cloudinary"))
+      addCloudinaryParams(urlObj, params)
 
     return urlObj.toString()
   } catch (err) {
